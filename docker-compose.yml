@@ -5,7 +5,7 @@ services:
 
     environment:
       POSTGRES_DB: dentalbot
-      POSTGRES_USER: dentalbot
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: dentalBot@123
 
     ports:
