@@ -4,12 +4,16 @@ target/
 
 # Java
 *.class
+
+# Logs
 *.log
+logs/
 
 # IDEs
 .idea/
 *.iml
 
+# VS Code
 .vscode/
 !.vscode/extensions.json
 
@@ -21,7 +25,6 @@ Thumbs.db
 .env
 .env.local
 .env.*
-
 !.env.example
 
 # Spring Boot
@@ -30,10 +33,6 @@ application-local.yml
 
 # Docker
 docker-compose.override.yml
-
-# Logs
-logs/
-*.log
 
 # Temporary files
 *.tmp

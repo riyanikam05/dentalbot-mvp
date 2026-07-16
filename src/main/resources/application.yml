@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5433/dentalbot
-    username: postgres
-    password: dentalBot@123
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -25,7 +25,7 @@ server:
   port: 8080
 
 jwt:
-  secret: NX06dc1usR24Jz+DPXJKehus6PaSAJ6T3ZLJCd8xMB4=d
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 logging:

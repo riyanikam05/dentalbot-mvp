@@ -4,9 +4,9 @@ services:
     container_name: dentalbot-postgres
 
     environment:
-      POSTGRES_DB: dentalbot
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: dentalBot@123
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     ports:
       - "5433:5432"
