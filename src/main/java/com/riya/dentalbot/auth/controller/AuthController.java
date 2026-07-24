@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.riya.dentalbot.auth.dto.UserProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -36,5 +37,13 @@ public class AuthController {
         LoginResponse response = authService.login(request);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileResponse> getCurrentUser() {
+
+        return ResponseEntity.ok(
+            authService.getCurrentUser()
+        );
     }
 }
