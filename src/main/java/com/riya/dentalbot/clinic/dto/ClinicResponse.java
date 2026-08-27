@@ -6,23 +6,16 @@ import java.util.UUID;
 
 public record ClinicResponse(
 
-        UUID id,
-
-        String name,
-
-        String email,
-
-        String phone,
-
-        String address,
-
-        String city,
-
-        LocalTime workingHoursStart,
-
-        LocalTime workingHoursEnd,
-
-        LocalDateTime createdAt
+                UUID id,
+                String name,
+                String email,
+                String phone,
+                String address,
+                String city,
+                String whatsappPhoneNumberId,
+                LocalTime workingHoursStart,
+                LocalTime workingHoursEnd,
+                LocalDateTime createdAt
 
 ) {
 }

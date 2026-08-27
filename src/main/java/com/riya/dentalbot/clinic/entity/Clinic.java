@@ -53,4 +53,7 @@ public class Clinic {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "whatsapp_phone_number_id", unique = true)
+    private String whatsappPhoneNumberId;
+
 }

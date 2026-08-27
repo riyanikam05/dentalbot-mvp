@@ -31,3 +31,8 @@ jwt:
 logging:
   level:
     org.springframework.security: INFO
+
+twilio:
+  account-sid: ${TWILIO_ACCOUNT_SID}
+  auth-token: ${TWILIO_AUTH_TOKEN}
+  whatsapp-from: ${TWILIO_WHATSAPP_FROM}

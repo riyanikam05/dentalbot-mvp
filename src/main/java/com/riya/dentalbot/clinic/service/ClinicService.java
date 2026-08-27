@@ -35,6 +35,7 @@ public class ClinicService {
         clinic.setName(request.name());
         clinic.setPhone(request.phone());
         clinic.setAddress(request.address());
+        clinic.setWhatsappPhoneNumberId(request.whatsappPhoneNumberId());
         clinic.setUpdatedAt(LocalDateTime.now());
 
         Clinic updatedClinic = clinicRepository.save(clinic);
@@ -64,6 +65,7 @@ public class ClinicService {
                 clinic.getPhone(),
                 clinic.getAddress(),
                 clinic.getCity(),
+                clinic.getWhatsappPhoneNumberId(),
                 clinic.getWorkingHoursStart(),
                 clinic.getWorkingHoursEnd(),
                 clinic.getCreatedAt());
