@@ -10,47 +10,72 @@ import com.riya.dentalbot.user.repository.UserRepository;
 import com.riya.dentalbot.whatsapp.service.WhatsAppService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/missed-calls")
 @RequiredArgsConstructor
+@Slf4j
 public class MissedCallController {
 
-    private final ConversationService conversationService;
-    private final WhatsAppService whatsAppService;
-    private final UserRepository userRepository;
-    private final ClinicRepository clinicRepository;
+        private final ConversationService conversationService;
+        private final WhatsAppService whatsAppService;
+        private final UserRepository userRepository;
+        private final ClinicRepository clinicRepository;
 
-    @PostMapping
-    public ResponseEntity<Void> triggerMissedCall(
-            @Valid @RequestBody TriggerMissedCallRequest request) {
+        @PostMapping
+        public ResponseEntity<?> triggerMissedCall(
+                        @Valid @RequestBody TriggerMissedCallRequest request) {
 
-        Clinic clinic = getAuthenticatedClinic();
+                Clinic clinic = getAuthenticatedClinic();
 
-        String openingMessage = conversationService.startConversation(
-                clinic.getId(), request.patientPhone());
+                String openingMessage = conversationService.startConversation(
+                                clinic.getId(), request.patientPhone());
 
-        whatsAppService.sendMessage(request.patientPhone(), openingMessage);
+                try {
 
-        return ResponseEntity.ok().build();
-    }
+                        whatsAppService.sendMessage(request.patientPhone(), openingMessage);
 
-    private Clinic getAuthenticatedClinic() {
+                        return ResponseEntity.ok(Map.of(
+                                        "leadCreated", true,
+                                        "whatsappSent", true));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+                } catch (Exception ex) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                        log.warn(
+                                        "Lead created for {} but WhatsApp message could not be sent: {}",
+                                        request.patientPhone(),
+                                        ex.getMessage());
 
-        return clinicRepository.findById(user.getClinicId())
-                .orElseThrow(() -> new ResourceNotFoundException("Clinic not found"));
-    }
+                        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                                        "leadCreated", true,
+                                        "whatsappSent", false,
+                                        "warning",
+                                        "Lead created, but the WhatsApp message could not be sent automatically. "
+                                                        + "This is a known Twilio Sandbox restriction on business-initiated messages — "
+                                                        + "ask the patient to message your WhatsApp number first, then retry."));
+                }
+        }
+
+        private Clinic getAuthenticatedClinic() {
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                String email = authentication.getName();
+
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+                return clinicRepository.findById(user.getClinicId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Clinic not found"));
+        }
 }
