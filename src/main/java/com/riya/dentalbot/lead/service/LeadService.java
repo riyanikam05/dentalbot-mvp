@@ -17,6 +17,12 @@ public interface LeadService {
 
     Lead createNewLead(UUID clinicId, String patientPhone);
 
+    Lead createDemoLead(
+            String patientName,
+            String patientPhone,
+            String service,
+            String preferredTime);
+
     Lead updateCollectedDetails(
             UUID leadId,
             String serviceNeeded,

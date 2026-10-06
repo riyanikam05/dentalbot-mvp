@@ -175,6 +175,31 @@ public class LeadServiceImpl implements LeadService {
         return mapToResponse(savedLead);
     }
 
+    @Override
+    @Transactional
+    public Lead createDemoLead(
+            String patientName,
+            String patientPhone,
+            String service,
+            String preferredTime) {
+
+        Clinic clinic = getAuthenticatedClinic();
+
+        Lead lead = Lead.builder()
+                .id(UUID.randomUUID())
+                .clinicId(clinic.getId())
+                .patientName(patientName)
+                .patientPhone(patientPhone)
+                .serviceNeeded(service)
+                .preferredTimeText(preferredTime)
+                .status(LeadStatus.AWAITING_CONFIRMATION)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        return leadRepository.save(lead);
+    }
+
     private Clinic getAuthenticatedClinic() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
